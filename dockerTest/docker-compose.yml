@@ -1,0 +1,32 @@
+version: '3'
+services:
+  https-proxy:
+    build: ./proxy
+    volumes:
+      - ./proxy/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    ports:
+      - 443:8443
+    networks:
+      proxynet:
+        ipv4_address: 172.16.1.3
+  dvwa:
+    build: ./dvwa
+    ports:
+      - 80:80
+    networks:
+      proxynet:
+        ipv4_address: 172.16.1.2
+  modsecurity:
+    build: ./modsecurity
+    environment:
+      - BACKEND=http://172.16.1.2
+    ports:
+      - 8080:80
+    networks:
+      proxynet:
+        ipv4_address: 172.16.1.5
+networks:
+  proxynet:
+    ipam:
+      config:
+        - subnet: 172.16.1.0/24
