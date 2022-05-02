@@ -1,0 +1,8 @@
+[lab]
+192.168.37.143
+
+
+[lab:vars]
+ansible_user=apache
+ansible_password=apache123
+ansible_become_password=apache123

@@ -1,0 +1,19 @@
+---
+- hosts: lab
+  tasks:
+  - name: test connectivity
+    ping: 
+    
+  - name: check username (unpriv)
+    register: unprivOutput
+    shell:
+     whoami
+     
+  - name: check username (priv)
+    register: privOutput
+    become: yes
+    shell:
+     whoami
+     
+  - debug: var=unprivOutput.stdout_lines
+  - debug: var=privOutput.stdout_lines

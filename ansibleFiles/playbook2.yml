@@ -1,0 +1,50 @@
+---
+# Host is considering all hosts and will have privilege
+- hosts: all
+  become: yes
+  tasks:
+  - name: Update Apt
+    shell:
+      apt update
+      
+#  - name: Add Docker Pre-req Packages
+#    shell:
+#      sudo apt install apt-transport-https ca-certificates curl software-properties-common
+#  - name: Install required system packages
+#    apt:
+#      pkg:
+#        - apt-transport-https
+#        - ca-certificates
+#        - curl
+#        - software-properties-common
+#      state: latest
+#      update_cache: true
+        
+  - name: Update apt and install Docker
+    apt:
+      name:
+        - docker
+        - docker.io
+        - docker-compose
+        - git
+      state: present
+      update_cache: true
+        
+#  - name: Cloning my repository
+#    git:
+#      repo: https://github.com/vjc4861/Project_C.git
+#      dest: ~/Desktop/
+#      clone: yes
+#      update: yes
+
+  - name: Clone Git Repo
+    shell:
+      git clone https://github.com/vjc4861/Project_C.git
+      
+        
+  - name: Starting Docker
+    register: out
+    shell:
+      cd Project_C/dockerTest; docker-compose up -d
+      
+  - debug: var=out.stdout_lines
